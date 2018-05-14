@@ -102,6 +102,12 @@ struct thread
     unsigned magic;                     /* Detects stack overflow. */
 
     int64_t ticks_blocked;
+	
+	int old_priority;
+	struct lock *blocked;
+	bool donated;
+
+	struct list locks;
   };
 
 /* If false (default), use round-robin scheduler.
@@ -143,5 +149,7 @@ int thread_get_load_avg (void);
 bool cmp_priority (const struct list_elem *a, const struct list_elem *b, void *aux UNUSED);
 
 void blocked_thread_check (struct thread *t, void *aux UNUSED);
+
+void ready_list_sort();
 
 #endif /* threads/thread.h */

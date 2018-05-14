@@ -478,6 +478,11 @@ init_thread (struct thread *t, const char *name, int priority)
   t->magic = THREAD_MAGIC;
   //list_push_back (&all_list, &t->allelem);
   list_insert_ordered (&all_list, &t->allelem, (list_less_func *) &cmp_priority, NULL);
+  t->old_priority = -1;
+  lock_init(blocked);
+  t->donated = false;
+
+  list_init(locks);
 }
 
 /* Allocates a SIZE-byte frame at the top of thread T's stack and
@@ -611,4 +616,9 @@ blocked_thread_check (struct thread *t, void *aux UNUSED)
           thread_unblock(t);
       }
   }
+}
+
+void ready_list_sort()
+{
+	list_sort(&ready_list, cmp_priority, NULL);
 }
