@@ -478,11 +478,12 @@ init_thread (struct thread *t, const char *name, int priority)
   t->magic = THREAD_MAGIC;
   //list_push_back (&all_list, &t->allelem);
   list_insert_ordered (&all_list, &t->allelem, (list_less_func *) &cmp_priority, NULL);
-  t->old_priority = -1;
-  lock_init(blocked);
+  t->old_priority = priority;
+  t->blocked = NULL;
   t->donated = false;
-
-  list_init(locks);
+  //printf("\n priority in init1 = %d\n", thread_current()->priority);
+  list_init(&(t->locks));
+  //printf("\n priority in init2 = %d\n", thread_current()->priority);
 }
 
 /* Allocates a SIZE-byte frame at the top of thread T's stack and
